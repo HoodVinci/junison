@@ -6,11 +6,13 @@ from src.jsonclass import JsonClass
 from src.layers.javalayer import JavaClassLayer
 from src.layers.markdownlayer import MarkdownClassLayer
 from src.layers.phplayer import PhpClassLayer
+from src.layers.swiftlayer import SwiftClassLayer
 
 java_template = None
 java_package = "com.example.test"
 php_template = None
 markdown_template = None
+swift_template = None
 
 env = None
 
@@ -29,11 +31,13 @@ def _generate(file_path):
     json_class = JsonClass(file_path)
     java_class = JavaClassLayer(json_class, java_package)
     php_class = PhpClassLayer(json_class)
+    swift_class = SwiftClassLayer(json_class)
     markdown_class = MarkdownClassLayer(json_class, php_template.render(class_=php_class),
                                         java_template.render(class_=java_class))
     _render_and_write(class_=java_class, template=java_template, target_dir='generated/java', extension='java')
     _render_and_write(class_=php_class, template=php_template, target_dir='generated/php', extension='php')
     _render_and_write(class_=markdown_class, template=markdown_template, target_dir='generated/docs', extension='md')
+    _render_and_write(class_=swift_class, template=swift_template, target_dir='generated/swift', extension='swift')
 
 
 def _render_and_write(class_, template, target_dir, extension):
@@ -61,6 +65,7 @@ if __name__ == '__main__':
     markdown_template = env.get_template('markdown_template.md')
     java_template = env.get_template('java_template.java')
     php_template = env.get_template('php_template.php')
+    swift_template = env.get_template('swift_template.swift')
 
     _apply_function_to_each('jsons', _generate)
     generate_yaml('generated/docs', 'generated/mkdocs.yml')
