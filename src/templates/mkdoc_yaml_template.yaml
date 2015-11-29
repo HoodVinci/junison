@@ -1,0 +1,8 @@
+site_name: Tests de generation de docs
+theme: readthedocs
+pages :
+- Acceuil : index.md
+- Classes :
+{% for f in files%}
+  - {{f}} : classes/{{f}}.md
+{% endfor %}

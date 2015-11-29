@@ -1,0 +1,27 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "string_field": {
+      "type": "string",
+      "description": "basic string field"
+    },
+    "integer_field": {
+      "type": "string",
+      "description": "integer field"
+    },
+    "boolean_field": {
+      "description": "boolean field",
+      "type": "integer",
+      "default": false
+    },
+    "enum_field": {
+      "type": "string",
+      "enum": [
+        "value_1",
+        "value_2",
+        "value_3"
+      ]
+    }
+  },
+  "type": "object"
+}

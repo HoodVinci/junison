@@ -1,0 +1,9 @@
+site_name: Tests de generation de docs
+theme: readthedocs
+pages :
+- Acceuil : index.md
+- Classes :
+  - basic_type : classes/basic_type.md
+  - basic_types_array : classes/basic_types_array.md
+  - inheritance : classes/inheritance.md
+  - ref_in_property : classes/ref_in_property.md

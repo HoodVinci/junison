@@ -1,0 +1,12 @@
+{
+  "additionalProperties": false,
+  "description": "basic inheritance demonstration with the extends value",
+  "properties": {
+    "external_ref": {
+      "type": "object",
+      "$ref": "basic_type.json",
+      "description": "ref to another class"
+    }
+  },
+  "type": "object"
+}

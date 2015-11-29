@@ -1,0 +1,14 @@
+{
+  "additionalProperties": false,
+  "description": "basic inheritance demonstration with the extends value",
+  "extends": {
+    "$ref": "basic_type.json"
+  },
+  "properties": {
+    "my_item": {
+      "type": "string",
+      "description": "This is not an inherited attibute"
+    }
+  },
+  "type": "object"
+}
