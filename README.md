@@ -4,7 +4,7 @@ A simple python library to generate Plain Old Objects in many languages
 
 ![](Junison.png)
 
-## Discalimer
+## Disclaimer
 This tool is still under development.  
 I am an android developer. (not a python one). 
 I don't really know php and other languages currently in templates.
