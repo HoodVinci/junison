@@ -41,7 +41,7 @@ Classe |Type | Nom | Description
 ```json
 {
   "boolean_field": 42, 
-  "enum_field": "value_3", 
+  "enum_field": "value_1", 
   "integer_field": "this is a default string", 
   "string_field": "this is a default string"
 }

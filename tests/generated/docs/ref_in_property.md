@@ -31,7 +31,7 @@ Classe |Type | Nom | Description
 {
   "external_ref": {
     "boolean_field": 42, 
-    "enum_field": "value_2", 
+    "enum_field": "value_1", 
     "integer_field": "this is a default string", 
     "string_field": "this is a default string"
   }

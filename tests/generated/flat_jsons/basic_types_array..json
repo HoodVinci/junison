@@ -1,0 +1,28 @@
+{
+    "additionalProperties": false, 
+    "description": "arrays of basic type", 
+    "properties": {
+        "boolean_array": {
+            "description": "boolean array of boolean ", 
+            "items": {
+                "type": "boolean"
+            }, 
+            "type": "array"
+        }, 
+        "integer_array": {
+            "description": "basic array of integer ", 
+            "items": {
+                "type": "integer"
+            }, 
+            "type": "array"
+        }, 
+        "string_array": {
+            "description": "basic array of string ", 
+            "items": {
+                "type": "string"
+            }, 
+            "type": "array"
+        }
+    }, 
+    "type": "object"
+}

@@ -1,4 +1,3 @@
-
 import random
 
 
@@ -21,11 +20,11 @@ class JsonField:
 
     """
 
-
-    exemple_map = {"string": "this is a default string", "integer": 42,"double":42.0,
-                 "boolean": True, "number": 42.01}
+    exemple_map = {"string": "this is a default string", "integer": 42, "double": 42.0,
+                   "boolean": True, "number": 42.01}
 
     def __init__(self, json_name, json_data, json_class_name):
+        self.json_raw_data = json_data
         self.json_description = ''
         self.json_name = json_name
         self.json_type = 'any'
@@ -50,8 +49,6 @@ class JsonField:
         if 'type' in json_data:
             self.json_type = json_data['type']
             self.parse_item_type(json_data)
-
-
 
         # parse default_value
         if 'default' in json_data:
@@ -107,29 +104,28 @@ class JsonField:
 
     def get_exemple_data(self, json_class):
         if self.is_enum():
-            return  random.choice(self.json_enum_items)
+            return random.choice(self.json_enum_items)
 
         elif self.is_list():
             # Put two items
-            num =random.randint(0,1);
+            num = random.randint(0, 1);
             res = []
-            i=0
-            while i <=num :
-               # res.append(self._get_exemple_data(self.json_item_type,self.json_external_ref,json_class))
-                i+=1
-            return res ;
-        else :
-            return self._get_exemple_data(self.json_type,self.json_external_ref,json_class)
+            i = 0
+            while i <= num:
+                # res.append(self._get_exemple_data(self.json_item_type,self.json_external_ref,json_class))
+                i += 1
+            return res;
+        else:
+            return self._get_exemple_data(self.json_type, self.json_external_ref, json_class)
 
+    def _get_exemple_data(self, type, external_ref, json_class):
 
-    def _get_exemple_data(self,type,external_ref,json_class):
-
-        if type=='array':
+        if type == 'array':
             raise AttributeError("type should not be array at this point")
 
-        if type in self.exemple_map :
+        if type in self.exemple_map:
             return self.exemple_map[type]
-        else :
+        else:
 
             class_ = json_class.get_class(external_ref)
             return class_.get_exemple_data()

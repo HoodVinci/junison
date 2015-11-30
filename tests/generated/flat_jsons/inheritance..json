@@ -1,0 +1,35 @@
+{
+    "additionalProperties": false, 
+    "description": "basic inheritance demonstration with the extends value", 
+    "extends": {
+        "$ref": "basic_type.json"
+    }, 
+    "properties": {
+        "boolean_field": {
+            "default": false, 
+            "description": "boolean field", 
+            "type": "integer"
+        }, 
+        "enum_field": {
+            "enum": [
+                "value_1", 
+                "value_2", 
+                "value_3"
+            ], 
+            "type": "string"
+        }, 
+        "integer_field": {
+            "description": "integer field", 
+            "type": "string"
+        }, 
+        "my_item": {
+            "description": "This is not an inherited attibute", 
+            "type": "string"
+        }, 
+        "string_field": {
+            "description": "basic string field", 
+            "type": "string"
+        }
+    }, 
+    "type": "object"
+}

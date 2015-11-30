@@ -28,7 +28,7 @@ class JsonClass:
         self.json_description = None
         self.json_name = os.path.basename(file_path).replace('.json', '')
         self.json_inheritance_tree = []
-
+        self.json_raw_data =None
         # Once we have set default values, parse true data
         self.parse_json_file(file_path)
         self.already_defined[self.json_file_path] = self
@@ -58,6 +58,7 @@ class JsonClass:
     def parse_json_file(self, json_path):
         with codecs.open(json_path, 'r', 'utf-8') as f:
             class_data = json.load(f);
+            self.json_raw_data = class_data
             # get description
             if 'description' in class_data:
                 self.json_description = class_data['description']
@@ -89,6 +90,10 @@ class JsonClass:
         for ascendant in reversed(self.json_inheritance_tree):
             res += ascendant.json_fields
         return res
+
+
+    def get_all_fields(self):
+        return self.json_fields + self.get_json_inherited_fields();
 
     def json_superclass(self):
         """
@@ -148,3 +153,18 @@ class JsonClass:
 
         """
         return os.path.join(os.path.dirname(self.json_file_path), ref)
+
+    def _merge_json_dicts(dictA, dictB):
+               return {key: value for (key, value) in (dictA.items() + dictB.items())}
+
+
+    def get_json_raw_properties(self):
+        json_fields_dict={}
+        for field in self.get_all_fields():
+            json_fields_dict[field.json_name] = field.json_raw_data;
+        return json_fields_dict ;
+
+    def get_flat_json_data(self):
+        flat_json_data = copy.deepcopy(self.json_raw_data)
+        flat_json_data['properties']= self.get_json_raw_properties()
+        return flat_json_data

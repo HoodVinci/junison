@@ -7,6 +7,7 @@ from src.layers.javalayer import JavaClassLayer
 from src.layers.markdownlayer import MarkdownClassLayer
 from src.layers.phplayer import PhpClassLayer
 from src.layers.swiftlayer import SwiftClassLayer
+import json
 
 java_template = None
 java_package = "com.example.test"
@@ -39,6 +40,10 @@ def _generate(file_path):
     _render_and_write(class_=markdown_class, template=markdown_template, target_dir='generated/docs', extension='md')
     _render_and_write(class_=swift_class, template=swift_template, target_dir='generated/swift', extension='swift')
 
+    target_flat_file = os.path.join('generated/flat_jsons','{0}.{1}'.format(json_class.json_name, '.json'))
+    # Wrting new data to target file
+    with codecs.open(target_flat_file, 'w','utf-8') as f:
+        json.dump(obj=json_class.get_flat_json_data(),ensure_ascii=False,fp=f,sort_keys="True",indent=4)
 
 def _render_and_write(class_, template, target_dir, extension):
     string_out = template.render(class_=class_)
