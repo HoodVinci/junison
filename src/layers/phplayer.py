@@ -76,6 +76,9 @@ class PhpFieldLayer:
     def description(self):
         return self.json_field.json_description
 
+    def  class_path(self):
+        return self.json_class.json_file_path ;
+
     def is_list(self):
         return self.json_field.is_list()
 

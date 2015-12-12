@@ -2,7 +2,9 @@ site_name: Tests de generation de docs
 theme: readthedocs
 pages :
 - Acceuil : index.md
-- Classes :
-{% for f in files%}
-  - {{f}} : classes/{{f}}.md
+{% for dir,subfiles in files.iteritems() %}
+- {{dir}} :
+    {% for file in subfiles %}
+    - {{file}} : {{dir}}/{{file}}
+    {% endfor %}
 {% endfor %}

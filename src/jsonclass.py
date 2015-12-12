@@ -23,7 +23,7 @@ class JsonClass:
         :param file_path:
         :return:
         """
-        self.json_file_path = file_path
+        self.json_file_path = os.path.abspath(file_path)
         self.json_fields = []
         self.json_description = None
         self.json_name = os.path.basename(file_path).replace('.json', '')
@@ -52,7 +52,7 @@ class JsonClass:
         :return:
         """
         new_field = JsonField(json_name=json_field_name,
-                              json_data=json_data, json_class_name=self.json_name)
+                              json_data=json_data, json_class=self)
         self.add_class_field(new_field)
 
     def parse_json_file(self, json_path):
@@ -72,7 +72,7 @@ class JsonClass:
             if 'extends' in class_data:
                 extends_data = class_data['extends']
                 if '$ref' in extends_data:
-                    superclass_path = self._get_class_path(extends_data['$ref'])
+                    superclass_path = self.get_class_path(extends_data['$ref'])
                     if superclass_path in self.already_defined:
                         superclass = self.already_defined[superclass_path]
                     else:
@@ -116,6 +116,8 @@ class JsonClass:
                 refs.append(field.json_external_ref)
         return refs;
 
+
+
     def __str__(self):
         s = 'description %s' % self.json_description
         for json_field in self.json_fields:
@@ -137,7 +139,7 @@ class JsonClass:
         :return: The JsonClass which is designated by the relative reference
         :rtype: JsonClass
         """
-        path = self._get_class_path(ref);
+        path = self.get_class_path(ref);
         print(path)
         print(self.json_file_path)
         if path == self.json_file_path:
@@ -145,14 +147,23 @@ class JsonClass:
         else:
             return JsonClass(file_path=path)
 
-    def _get_class_path(self, ref):
+    def get_class_path(self, ref):
         """
         Merge the current file path with the relative ref
         :param ref:
         :return: A consolidated string representing the file path to the ref
 
         """
-        return os.path.join(os.path.dirname(self.json_file_path), ref)
+        fileDir = os.path.dirname(os.path.realpath(self.json_file_path))
+
+        filename = os.path.join(fileDir,ref)
+
+        filename= os.path.abspath(os.path.realpath(filename))
+        return filename
+
+
+
+
 
     def _merge_json_dicts(dictA, dictB):
                return {key: value for (key, value) in (dictA.items() + dictB.items())}

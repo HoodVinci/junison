@@ -5,14 +5,15 @@ import os
 # Utility functions
 #
 
-base_type_map = {"string": "String", "integer": "Integer","double":"Dpuble",
+base_type_map = {"string": "String", "integer": "Integer","double":"Double",
                  "boolean": "Boolean", "number": "Float", "any": "Object"}
 
 array_type = "List<T>"
 
 
 def class_name(json_name):
-    return inflection.camelize(json_name, True)
+    return inflection.camelize(json_name.replace('.json',''), True)
+
 
 
 def basic_type(json_type, json_external_ref):
@@ -33,7 +34,8 @@ def basic_type(json_type, json_external_ref):
 
 
 class JavaClassLayer:
-    def __init__(self, json_class, package):
+    def __init__(self, json_class, package, schemes_base_dir):
+        self.schemes_base_dir = schemes_base_dir
         self.json_class = json_class
         self.fields = []
         self.package = package
@@ -46,8 +48,20 @@ class JavaClassLayer:
     def name(self):
         return class_name(self.json_class.json_name)
 
+    def get_package(self):
+        rel_path = os.path.abspath(self.json_class.json_file_path).replace('%s/'%os.path.abspath(self.schemes_base_dir),'')
+        rel_path = os.path.dirname(rel_path).replace('/','.')
+        return "{0}.{1}".format(self.package,rel_path)
+
+
+
     def description(self):
         return self.json_class.json_description
+
+    def  class_path(self):
+        return self.json_class.json_file_path ;
+
+
 
     def has_superclass(self):
         return self.json_class.json_superclass()
@@ -55,11 +69,29 @@ class JavaClassLayer:
     def superclass_name(self):
         return class_name(self.json_class.json_superclass().json_name)
 
+    def dir(self):
+        return os.path.dirname(os.path.abspath(self.json_class.json_file_path))
+
     def get_imports(self):
+        '''
+        import should be constructed from base_package
+        We assume that the base package is mapped on base scheme folder
+        :return:
+
+        '''
         imports = []
         for external in self.json_class.get_json_external_refs():
-            name = class_name(os.path.basename(external).replace('.json', ''))
-            imports.append('{0}.{1}'.format(self.package,name))
+
+            schemes_abs_path = os.path.abspath(self.schemes_base_dir)
+            # external is related to current file so recontruction is a little tricky
+            external_abs_path =  os.path.abspath(os.path.join(self.dir(),external))
+            external_dir_rel_path = os.path.relpath(os.path.dirname(external_abs_path),schemes_abs_path)
+
+            # we fake the package as a path
+            full_package_path = '{0}.{1}'.format(self.package,external_dir_rel_path.replace('/','.'))
+
+
+            imports.append('{0}.{1}'.format(full_package_path,class_name(os.path.basename(external))))
         return imports
 
 

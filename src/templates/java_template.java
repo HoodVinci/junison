@@ -1,10 +1,11 @@
+package {{class_.get_package()}};
 
 /**
 * This class has been auto-generated
 * Don't modify it. Or do it at your own risk
 */
 
-package {{class_.package}}
+
 
 {% for import in class_.get_imports() %}
 import {{import}};
@@ -105,18 +106,18 @@ public class {{class_.name()}} {% if class_.has_superclass() %} extends {{class_
             return (new {{class_.name()}}[size]);
         }
 
-    }
+    };
 
 
 
     public void writeToParcel(Parcel dest, int flags) {
 {% for field in class_.fields %}
-    {% if field.is_list() %}
-        dest.writeList({{field.name()}})
-    {% else %}
-        dest.writeValue({{field.name()}})
-    {% endif %}
-    {% endfor %}
+{% if field.is_list() %}
+    dest.writeList({{field.name()}});
+{% else %}
+    dest.writeValue({{field.name()}});
+{% endif %}
+{% endfor %}
     }
 
     public int describeContents() {
@@ -150,7 +151,7 @@ public class {{class_.name()}} {% if class_.has_superclass() %} extends {{class_
         }
 
         @Override
-        public String toString() { d
+        public String toString() {
             return this.value;
         }
 

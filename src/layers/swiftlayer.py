@@ -47,6 +47,9 @@ class SwiftClassLayer:
     def name(self):
         return class_name(self.json_class.json_name)
 
+    def  class_path(self):
+        return self.json_class.json_file_path ;
+
     def description(self):
         return self.json_class.json_description
 

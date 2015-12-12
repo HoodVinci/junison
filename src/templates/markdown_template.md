@@ -39,6 +39,8 @@ Classe |Type | Nom | Description
 
 ## Exemple
 
+
+
 ```json
 {{class_.get_exemple_data()}}
 ```
@@ -52,3 +54,7 @@ Classe |Type | Nom | Description
 ```php
 {{class_.php_code}}
 ```
+
+
+
+

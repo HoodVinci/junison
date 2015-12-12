@@ -23,13 +23,13 @@ class JsonField:
     exemple_map = {"string": "this is a default string", "integer": 42, "double": 42.0,
                    "boolean": True, "number": 42.01}
 
-    def __init__(self, json_name, json_data, json_class_name):
+    def __init__(self, json_name, json_data, json_class):
         self.json_raw_data = json_data
         self.json_description = ''
         self.json_name = json_name
         self.json_type = 'any'
         self.json_item_type = None
-        self.json_class_name = json_class_name
+        self.json_class = json_class
         self.json_default_value = None
         self.json_enum_items = []
         self.json_external_ref = None
@@ -126,6 +126,5 @@ class JsonField:
         if type in self.exemple_map:
             return self.exemple_map[type]
         else:
-
             class_ = json_class.get_class(external_ref)
             return class_.get_exemple_data()
