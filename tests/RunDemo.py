@@ -17,6 +17,8 @@ swift_template = None
 
 env = None
 
+java_classes ={}
+
 
 def _apply_function_to_each(dir, function, **kwargs):
     """
@@ -30,11 +32,12 @@ def _apply_function_to_each(dir, function, **kwargs):
 def _generate(file_path):
     print("Processing %s" % file_path)
     json_class = JsonClass(file_path)
-    java_class = JavaClassLayer(json_class, java_package)
+    java_class = JavaClassLayer(json_class, java_package,'jsons')
+    java_classes[java_class.name()]=java_class
     php_class = PhpClassLayer(json_class)
     swift_class = SwiftClassLayer(json_class)
     markdown_class = MarkdownClassLayer(json_class, php_template.render(class_=php_class),
-                                        java_template.render(class_=java_class))
+                                        java_template.render(class_=java_class),'jsons')
     _render_and_write(class_=java_class, template=java_template, target_dir='generated/java', extension='java')
     _render_and_write(class_=php_class, template=php_template, target_dir='generated/php', extension='php')
     _render_and_write(class_=markdown_class, template=markdown_template, target_dir='generated/docs', extension='md')
@@ -64,6 +67,16 @@ def generate_yaml(dir, target_path):
     with codecs.open(target_path, 'w', 'utf-8') as f:
         f.write(string_out)
 
+def generate_graph(target_path):
+    """
+    generate yml for mkdocs
+    """
+
+    ytemplate = env.get_template('graph_template.dot')
+    string_out = ytemplate.render(classes=java_classes)
+    with codecs.open(target_path, 'w', 'utf-8') as f:
+        f.write(string_out)
+
 
 if __name__ == '__main__':
     env = Environment(loader=FileSystemLoader("../src/templates"), trim_blocks=True)
@@ -73,4 +86,5 @@ if __name__ == '__main__':
     swift_template = env.get_template('swift_template.swift')
 
     _apply_function_to_each('jsons', _generate)
-    generate_yaml('generated/docs', 'generated/mkdocs.yml')
+   # generate_yaml('generated/docs', 'generated/mkdocs.yml')
+    generate_graph('generated/class_diagram.dot')

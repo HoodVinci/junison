@@ -5,15 +5,14 @@ import os
 # Utility functions
 #
 
-base_type_map = {"string": "String", "integer": "Integer","double":"Double",
+base_type_map = {"string": "String", "integer": "Integer", "double": "Double",
                  "boolean": "Boolean", "number": "Float", "any": "Object"}
 
 array_type = "List<T>"
 
 
 def class_name(json_name):
-    return inflection.camelize(json_name.replace('.json',''), True)
-
+    return inflection.camelize(json_name.replace('.json', ''), True)
 
 
 def basic_type(json_type, json_external_ref):
@@ -48,20 +47,20 @@ class JavaClassLayer:
     def name(self):
         return class_name(self.json_class.json_name)
 
+    def generate_fields(self):
+        return 0 < len(self.fields) <= 4
+
     def get_package(self):
-        rel_path = os.path.abspath(self.json_class.json_file_path).replace('%s/'%os.path.abspath(self.schemes_base_dir),'')
-        rel_path = os.path.dirname(rel_path).replace('/','.')
-        return "{0}.{1}".format(self.package,rel_path)
-
-
+        rel_path = os.path.abspath(self.json_class.json_file_path).replace(
+            '%s/' % os.path.abspath(self.schemes_base_dir), '')
+        rel_path = os.path.dirname(rel_path).replace('/', '.')
+        return "{0}.{1}".format(self.package, rel_path)
 
     def description(self):
         return self.json_class.json_description
 
-    def  class_path(self):
-        return self.json_class.json_file_path ;
-
-
+    def class_path(self):
+        return self.json_class.json_file_path;
 
     def has_superclass(self):
         return self.json_class.json_superclass()
@@ -81,17 +80,15 @@ class JavaClassLayer:
         '''
         imports = []
         for external in self.json_class.get_json_external_refs():
-
             schemes_abs_path = os.path.abspath(self.schemes_base_dir)
             # external is related to current file so recontruction is a little tricky
-            external_abs_path =  os.path.abspath(os.path.join(self.dir(),external))
-            external_dir_rel_path = os.path.relpath(os.path.dirname(external_abs_path),schemes_abs_path)
+            external_abs_path = os.path.abspath(os.path.join(self.dir(), external))
+            external_dir_rel_path = os.path.relpath(os.path.dirname(external_abs_path), schemes_abs_path)
 
             # we fake the package as a path
-            full_package_path = '{0}.{1}'.format(self.package,external_dir_rel_path.replace('/','.'))
+            full_package_path = '{0}.{1}'.format(self.package, external_dir_rel_path.replace('/', '.'))
 
-
-            imports.append('{0}.{1}'.format(full_package_path,class_name(os.path.basename(external))))
+            imports.append('{0}.{1}'.format(full_package_path, class_name(os.path.basename(external))))
         return imports
 
 
@@ -139,18 +136,18 @@ class JavaFieldLayer:
     def setter_function_name(self):
         return 'set%s' % inflection.camelize(self.json_field.json_name.lower(), True)
 
-    def default_value(self, json_type, value):
+    def default_value(self):
         json_type = self.json_field.json_type
         value = self.json_field.json_default_value
-        res = {'string': '"%s"' % value, 'boolean': 'true' if value else 'false', 'integer': value,
+        map = {'string': '"%s"' % value, 'boolean': 'true' if value else 'false', 'integer': value,
                'number': '%sf' % value}
-        if json_type in res:
-            return res[json_type];
+        if json_type in map:
+            return map[json_type];
         else:
             return value;
 
     def has_default_value(self):
-        return self.json_field.json_default_value
+        return self.json_field.has_default_value
 
 
 class JavaEnumLayer:

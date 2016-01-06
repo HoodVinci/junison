@@ -100,7 +100,7 @@ class JsonClass:
         :return: the JsonClass that the current class extends
         """
         if self.json_inheritance_tree:
-            return self.json_inheritance_tree[0]
+            return self.json_inheritance_tree[len(self.json_inheritance_tree)-1]
         else:
             return None
 

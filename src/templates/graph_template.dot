@@ -1,0 +1,19 @@
+digraph hierarchy {
+size="5,5"
+node[shape=record,style=filled,fillcolor=gray95]
+edge[dir=back, arrowtail=empty]
+
+{% for name,class_ in classes.iteritems() %}
+{{name}}[label = "{ {{class_.name()}} | {% for field in class_.fields%} + {{field.type().replace('<','\<').replace('>','\>')}} {{field.name()}} \n {% endfor %} }"]
+{% endfor %}
+
+
+{% for name,class_ in classes.iteritems() %}
+{% if class_.has_superclass()%}
+{{class_.superclass_name()}}->{{name}}
+{% endif %}
+{% if class_.has_superclass()%}
+{{class_.superclass_name()}}->{{name}}
+{% endif %}
+{% endfor %}
+}

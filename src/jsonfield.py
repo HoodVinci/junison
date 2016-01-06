@@ -33,6 +33,7 @@ class JsonField:
         self.json_default_value = None
         self.json_enum_items = []
         self.json_external_ref = None
+        self.has_default_value = False
 
         # After setting default parse data
         self.parse(json_data)
@@ -52,7 +53,8 @@ class JsonField:
 
         # parse default_value
         if 'default' in json_data:
-            self.default_value = json_data['default']
+            self.has_default_value = True
+            self.json_default_value = json_data['default']
 
         if 'enum' in json_data:
             self.json_enum_items = json_data['enum']
